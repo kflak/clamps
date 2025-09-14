@@ -24,19 +24,20 @@
 
 (defstruct sensor id path data unwatch)
 
-(defstruct (sensor-data (:constructor make-sensor-data (&optional oa ob og x y z gx gy gz gyrox gyroy gyroz))
+(defstruct (sensor-data (:constructor make-sensor-data (&optional oa ob og x y z gx gy gz gyrox gyroy gyroz delta-g))
                         (:print-object))
   (oa 0) (ob 0) (og 0)
   (x 0) (y 0) (z 0)
   (gx 0) (gy 0) (gz 0)
-  (gyrox 0) (gyroy 0)(gyroz 0))
+  (gyrox 0) (gyroy 0)(gyroz 0)
+  (delta-g 0))
 
 (defmethod print-object ((data sensor-data) stream)
-  (format stream "#S(sensor-data :oa ~,2f :ob ~,2f :og ~,2f~&:x ~,2f :y ~,2f :z ~,2f~&:gx ~,2f :gy ~,2f :gz ~,2f~&:gyrox ~,2f :gyroy ~,2f :gyroz ~,2f)~%"
+  (format stream "#S(sensor-data :oa ~,2f :ob ~,2f :og ~,2f~&:x ~,2f :y ~,2f :z ~,2f~&:gx ~,2f :gy ~,2f :gz ~,2f~&:gyrox ~,2f :gyroy ~,2f :gyroz ~,2f :delta-g ~,2f)~%"
           (sensor-data-oa data) (sensor-data-ob data) (sensor-data-og data)
           (sensor-data-x data) (sensor-data-y data) (sensor-data-z data)
           (sensor-data-gx data) (sensor-data-gy data) (sensor-data-gz data)
-          (sensor-data-gyrox data) (sensor-data-gyroy data) (sensor-data-gyroz data)))
+          (sensor-data-gyrox data) (sensor-data-gyroy data) (sensor-data-gyroz data) (sensor-data-delta-g data)))
 
 (defun clog-dsp-widgets:sensor-data-reader-fn (&rest data)
   (apply #'make-sensor-data data))
@@ -45,7 +46,7 @@
   (typecase val
     (clamps-sensors::sensor-data
      (with-slots (oa ob og x y z gx gy gz gyrox gyroy gyroz) val
-       (list oa ob og x y z gx gy gz gyrox gyroy gyroz) ))
+       (list oa ob og x y z gx gy gz gyrox gyroy gyroz delta-g)))
     (otherwise val)))
 
 (defun add-sensor (id)
@@ -62,7 +63,8 @@
                                          :orientation t
                                          :xyz nil
                                          :gxyz nil
-                                         :gyro nil)))))
+                                         :gyro nil
+                                         :delta-g nil)))))
       (setf (getf *sensors* id)
             (make-sensor :id id
                          :path path
@@ -130,3 +132,6 @@
 
 (defun sensor-gyroz (sensor)
   (sensor-data-gyroz (sensor-data sensor)))
+
+(defun sensor-delta-g (sensor)
+  (sensor-data-delta-g (sensor-data sensor)))

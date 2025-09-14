@@ -24,6 +24,7 @@
 
 (defpackage #:clamps-sensors
   (:use #:cl #:cl-refs #:clog-dsp-widgets)
+  (:import-from :cm #:at #:now)
   (:export #:make-sensor
            #:make-sensor-data
            #:sensor-id
@@ -35,4 +36,7 @@
            #:sensor-gx #:sensor-gy #:sensor-gz
            #:sensor-gyrox #:sensor-gyroy #:sensor-gyroz
            #:add-sensor #:remove-sensor #:find-sensor #:list-sensors
-           #:with-sensor-add-watch))
+           #:with-sensor-add-watch
+           #:start-deltatrigger
+           #:stop-deltatrigger
+           #:set-threshold))

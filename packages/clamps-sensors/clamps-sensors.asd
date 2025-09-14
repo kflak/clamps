@@ -7,6 +7,7 @@ in clamps."
   :license  "Gnu Public license, version 2.0 or later."
   :version "0.0.1"
   :serial t
-  :depends-on (#:cl-refs #:orm-utils #:clog-dsp-widgets #:incudine)
+  :depends-on (#:cl-refs #:orm-utils #:clog-dsp-widgets #:incudine #:cm)
   :components ((:file "package")
-               (:file "sensors")))
+               (:file "sensors")
+               (:file "delta-g")))
